@@ -16,6 +16,7 @@
 		9C21B07B242D709500AA8879 /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C21B07A242D709500AA8879 /* CustomTableViewCell.swift */; };
 		9C21B07D242D73A600AA8879 /* InfoForMe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C21B07C242D73A600AA8879 /* InfoForMe.swift */; };
 		9C21B07F242D75B200AA8879 /* PlaceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C21B07E242D75B200AA8879 /* PlaceModel.swift */; };
+		9C21B081242E739B00AA8879 /* NewPlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C21B080242E739B00AA8879 /* NewPlaceViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		9C21B07A242D709500AA8879 /* CustomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
 		9C21B07C242D73A600AA8879 /* InfoForMe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoForMe.swift; sourceTree = "<group>"; };
 		9C21B07E242D75B200AA8879 /* PlaceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceModel.swift; sourceTree = "<group>"; };
+		9C21B080242E739B00AA8879 /* NewPlaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPlaceViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +70,7 @@
 				9C21B078242D5AD500AA8879 /* MainViewController.swift */,
 				9C21B07E242D75B200AA8879 /* PlaceModel.swift */,
 				9C21B07A242D709500AA8879 /* CustomTableViewCell.swift */,
+				9C21B080242E739B00AA8879 /* NewPlaceViewController.swift */,
 				9C21B06A242D5A8700AA8879 /* Main.storyboard */,
 				9C21B06D242D5A8A00AA8879 /* Assets.xcassets */,
 				9C21B06F242D5A8A00AA8879 /* LaunchScreen.storyboard */,
@@ -151,6 +154,7 @@
 				9C21B07F242D75B200AA8879 /* PlaceModel.swift in Sources */,
 				9C21B065242D5A8700AA8879 /* AppDelegate.swift in Sources */,
 				9C21B07B242D709500AA8879 /* CustomTableViewCell.swift in Sources */,
+				9C21B081242E739B00AA8879 /* NewPlaceViewController.swift in Sources */,
 				9C21B07D242D73A600AA8879 /* InfoForMe.swift in Sources */,
 				9C21B067242D5A8700AA8879 /* SceneDelegate.swift in Sources */,
 			);

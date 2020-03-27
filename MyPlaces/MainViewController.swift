@@ -5,7 +5,7 @@ class MainViewController: UITableViewController {
     
     //let places = [Place(name: "1998 — Крошка моя", location: "Москва", type: "Руки вверх", image: "1998 — Крошка моя")]
     //заменяем переменную выше на следующее
-    let places = Place.getPlaces()
+    let places = Place.getPlaces() // благодаря тому, что метод static мы можем обращаться к нему сразу через саму структуру
 
     
     override func viewDidLoad() {
@@ -45,6 +45,6 @@ class MainViewController: UITableViewController {
     }
     */
     
-    @IBAction func cancelAction(_ segue: UIStoryboardSegue) {} //метод для выхода при нажати кнопки cancel 
+    @IBAction func cancelAction(_ segue: UIStoryboardSegue) {} //метод для выхода при нажати кнопки cancel
 
 }
