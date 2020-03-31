@@ -17,7 +17,7 @@ class NewPlaceViewController: UITableViewController {
         super.viewDidLoad()
         
         tableView.tableFooterView = UIView() //заменяем низ TVC на VC. Избавляемся от линий снизу
-        saveButton.isEnabled = false //отключаем по умолчанию кнопку и будет отслеживать в реальном времени заполнение placeName
+        saveButton.isEnabled = false //отключаем по умолчанию кнопку и будем отслеживать в реальном времени заполнение placeName
         
         //отслеживаем редактирование текста placeName в реальном времени. Выполняем данный метод NewPlaceViewController(self)
         //метод textFieldChanged будет вызываться при редактированиие текста (.editingChanged) - event
@@ -120,9 +120,10 @@ extension NewPlaceViewController: UITextFieldDelegate {
 //UIImagePickerControllerDelegate позаоляет присвоить актлету изображения новое изображение
 extension NewPlaceViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
+    //этот метод вызывает сам класс NewPlaceViewController в зависситости что выбирает пользователь в Alert
     func choosImagePicker(source: UIImagePickerController.SourceType) {
         
-        //проверяем какой параметр нам придет, чтобы знать открыкать галерею или камеру
+        //проверяем какой параметр нам придет, чтобы знать что открыкать: галерею или камеру
         if UIImagePickerController.isSourceTypeAvailable(source) { //проверяем на доступность параметра source
             let imagePicker = UIImagePickerController()
             imagePicker.delegate = self //imagePicker назначает делегата сам класс NewPlaceViewController (тот, кто выполняет)
@@ -133,7 +134,7 @@ extension NewPlaceViewController: UIImagePickerControllerDelegate, UINavigationC
         }
     }
     
-    //в этом методе реализовываем присвоение imagePicker  новое изображение
+    //в этом методе реализовываем присвоение imagePicker  новое изображение. Он выполняется автоматически при нажатии кнопки choose в окне выбора картирнки
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
         placeImage.image = info[.editedImage] as? UIImage //присваиваем imageOfPlace отредактированное изображение используя ключ editedImage. Их там много :)
