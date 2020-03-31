@@ -5,7 +5,7 @@ class MainViewController: UITableViewController {
     
     //let places = [Place(name: "1998 — Крошка моя", location: "Москва", type: "Руки вверх", image: "1998 — Крошка моя")]
     //заменяем переменную выше на следующее
-    let places = Place.getPlaces() // благодаря тому, что метод static мы можем обращаться к нему сразу через саму структуру
+    var places = Place.getPlaces() // благодаря тому, что метод static мы можем обращаться к нему сразу через саму структуру
 
     
     override func viewDidLoad() {
@@ -25,10 +25,20 @@ class MainViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! CustomTableViewCell
-        cell.nameLabel.text = places[indexPath.row].name //таким образом выбираем конкретное свойство с массива places
-        cell.locationLabel.text = places[indexPath.row].location
-        cell.typeLabel.text = places[indexPath.row].type
-        cell.imageOfPlace.image = UIImage(named: places[indexPath.row].image)
+        
+        let place = places[indexPath.row]
+        // Благодаря let place = places[indexPath.row]  cell.typeLabel.text = places[indexPath.row].type меняем на cell.typeLabel.text = place.type
+
+        cell.nameLabel.text = place.name //таким образом выбираем конкретное свойство с массива places
+        cell.locationLabel.text = place.location
+        cell.typeLabel.text = place.type
+        
+        if place.image == nil {
+            cell.imageOfPlace.image = UIImage(named: place.restaurantImage!)
+        } else {
+            cell.imageOfPlace.image = place.image
+        }
+        
         cell.imageOfPlace.layer.cornerRadius = cell.imageOfPlace.frame.size.height / 2 //заркугляем imageView
         cell.imageOfPlace.clipsToBounds = true //обрезаем изображение
 
@@ -45,6 +55,12 @@ class MainViewController: UITableViewController {
     }
     */
     
-    @IBAction func cancelAction(_ segue: UIStoryboardSegue) {} //метод для выхода при нажати кнопки cancel
+    @IBAction func unwindSegue(_ segue: UIStoryboardSegue) { //метод для выхода при нажати кнопки cancel
+    
+        guard let newPlaceVC = segue.source as? NewPlaceViewController else { return }
+        newPlaceVC.saveNewPlace()
+        places.append(newPlaceVC.newPlace!)
+        tableView.reloadData()//обновляем интерфейс
 
+    }
 }

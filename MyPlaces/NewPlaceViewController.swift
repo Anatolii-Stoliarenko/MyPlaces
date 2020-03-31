@@ -3,15 +3,25 @@ import UIKit
 
 class NewPlaceViewController: UITableViewController {
 
+    var newPlace: Place? //создаем новую переменную структуры Place, чтобы можно было через нее заполнять наш массив
+    var imageIsChanged = false
     
-    @IBOutlet weak var imageOfPlace: UIImageView! //чтобы присвоить imageOfPlace новое изображение, нужно реализорвать метод UIImagePickerContollerDelegate
+    @IBOutlet weak var saveButton: UIBarButtonItem!
+    @IBOutlet weak var placeImage: UIImageView! //чтобы присвоить placeImage новое изображение, нужно реализорвать метод UIImagePickerContollerDelegate
     
+    @IBOutlet weak var placeName: UITextField!
+    @IBOutlet weak var placeLocation: UITextField!
+    @IBOutlet weak var placeType: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.tableFooterView = UIView() //заменяем низ TVC на VC. Избавляемся от линий снизу 
-
+        tableView.tableFooterView = UIView() //заменяем низ TVC на VC. Избавляемся от линий снизу
+        saveButton.isEnabled = false //отключаем по умолчанию кнопку и будет отслеживать в реальном времени заполнение placeName
+        
+        //отслеживаем редактирование текста placeName в реальном времени. Выполняем данный метод NewPlaceViewController(self)
+        //метод textFieldChanged будет вызываться при редактированиие текста (.editingChanged) - event
+        placeName.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
     }
 
     //MARK: - Table View Delegate
@@ -55,6 +65,28 @@ class NewPlaceViewController: UITableViewController {
             view.endEditing(true) //метод скрывает клавиатуру если была выбрана ячейка не 0
         }
     }
+    
+    func saveNewPlace() {
+        
+        var image: UIImage?
+        
+        if imageIsChanged {
+            image = placeImage.image
+        } else {
+            image = #imageLiteral(resourceName: "defaultImage")
+        }
+        
+        newPlace = Place(name: placeName.text!,
+                         location: placeLocation.text,
+                         type: placeType.text,
+                         image: image,
+                         restaurantImage: nil)
+    }
+    
+    //segue кнопки Cancel. При нажатии закрываем окно и высвобождаем память
+    @IBAction func cancelAction(_ sender: Any) {
+        dismiss(animated: true)
+    }
    
 }
 
@@ -70,6 +102,16 @@ extension NewPlaceViewController: UITextFieldDelegate {
         textField.resignFirstResponder()
         
         return true
+    }
+    
+    //проверяем placeName на пустоту или заполненость. Соответственно меняем свойство saveButton. Метод вызывается placeName.addTarget
+    @objc private func textFieldChanged() {
+        
+        if placeName.text?.isEmpty == false {
+            saveButton.isEnabled = true
+        } else {
+            saveButton.isEnabled = false
+        }
     }
 }
 
@@ -94,9 +136,10 @@ extension NewPlaceViewController: UIImagePickerControllerDelegate, UINavigationC
     //в этом методе реализовываем присвоение imagePicker  новое изображение
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
-        imageOfPlace.image = info[.editedImage] as? UIImage //присваиваем imageOfPlace отредактированное изображение используя ключ editedImage. Их там много :)
-        imageOfPlace.contentMode = .scaleToFill //позволяет масштабировать изображение по содержимому UIImage
-        imageOfPlace.clipsToBounds = true //обрезка по границе
+        placeImage.image = info[.editedImage] as? UIImage //присваиваем imageOfPlace отредактированное изображение используя ключ editedImage. Их там много :)
+        placeImage.contentMode = .scaleToFill //позволяет масштабировать изображение по содержимому UIImage
+        placeImage.clipsToBounds = true //обрезка по границе
+        imageIsChanged = true //меняем значение проверки добавлял пользователь фото или нет
         dismiss(animated: true) //отключает выбор фото
         //теперь нужно назначить делегатора(тот, кто делегирует обязанности UIImagePickerController) и делегата(выполняет данный метод)
     }

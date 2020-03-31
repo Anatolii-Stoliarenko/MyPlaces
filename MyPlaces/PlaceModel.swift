@@ -1,19 +1,16 @@
-//
-//  PlaceModel.swift
-//  MyPlaces
-//
-//  Created by Anatolii Stoliarenko on 27/03/2020.
-//  Copyright © 2020 Anatolii Stoliarenko. All rights reserved.
-//
+//тип UIImage находится в библиотеке UIKit
+//библиотека Foundation находится в UIKit
 
-import Foundation
+import UIKit
 
 struct Place {
     
+    //делаем все поля опциональными, а name оставляем обязательным
     var name: String
-    var location: String
-    var type: String
-    var image: String
+    var location: String?
+    var type: String?
+    var image: UIImage?
+    var restaurantImage: String?
     
     static let restaurantNames = ["1998 — Крошка моя",
                                   "1999 — Прости",
@@ -27,7 +24,7 @@ struct Place {
         var places = [Place]()
         
         for place in restaurantNames {
-            places.append(Place(name: place, location: "Москва", type: "Руки вверх", image: place))
+            places.append(Place(name: place, location: "Москва", type: "Руки вверх", image: nil, restaurantImage: place))
             
         }
         
