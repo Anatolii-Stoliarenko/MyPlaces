@@ -1,35 +1,23 @@
 //тип UIImage находится в библиотеке UIKit
 //библиотека Foundation находится в UIKit
 
-import UIKit
+import RealmSwift
 
-struct Place {
+//Realm работает только с класами. Наследуемся от Object. Это класс самого Realm
+class Place: Object {
     
-    //делаем все поля опциональными, а name оставляем обязательным
-    var name: String
-    var location: String?
-    var type: String?
-    var image: UIImage?
-    var restaurantImage: String?
+    @objc dynamic var name = ""
+    @objc dynamic var location: String?
+    @objc dynamic var type: String?
+    @objc dynamic var imageData: Data?
     
-    static let restaurantNames = ["1998 — Крошка моя",
-                                  "1999 — Прости",
-                                  "2001 — 18 мне уже",
-                                  "2002 — Он тебя целует",
-                                  "2018 — Плачешь в Темноте"]
-    
-    //делаем этот метод статичным (методом структуры). Это дает возможность обращаться к нему не через сам экзмепляр структуры, но через саму структуру. В этом случае все свойства должны также быть статичными
-    static func getPlaces() -> [Place] {
+    convenience init(name: String, location: String?, type: String?, imageData: Data?) {
         
-        var places = [Place]()
-        
-        for place in restaurantNames {
-            places.append(Place(name: place, location: "Москва", type: "Руки вверх", image: nil, restaurantImage: place))
-            
-        }
-        
-        
-        return places
+        self.init()
+        self.name = name
+        self.location = location
+        self.type = type
+        self.imageData = imageData
     }
     
 }

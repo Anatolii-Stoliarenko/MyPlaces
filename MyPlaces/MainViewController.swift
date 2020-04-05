@@ -1,15 +1,18 @@
 
 import UIKit
+import RealmSwift
 
-class MainViewController: UITableViewController {
+class MainViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
-    //let places = [Place(name: "1998 — Крошка моя", location: "Москва", type: "Руки вверх", image: "1998 — Крошка моя")]
-    //заменяем переменную выше на следующее
-    var places = Place.getPlaces() // благодаря тому, что метод static мы можем обращаться к нему сразу через саму структуру
-
+    @IBOutlet weak var tableView: UITableView!
+    
+    var places: Results<Place>!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //отображаем наши заведения из базы. Инициализируем обект places с помощью метода objects(Place.self)
+        places = realm.objects(Place.self)
 
     }
 
@@ -17,49 +20,61 @@ class MainViewController: UITableViewController {
 
  
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
-        return places.count
+        return places.isEmpty ? 0 : places.count //проверяем нашу базу данных на наличие записей. Если пустая, то присваиваем ноль
     }
 
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! CustomTableViewCell
-        
+
         let place = places[indexPath.row]
         // Благодаря let place = places[indexPath.row]  cell.typeLabel.text = places[indexPath.row].type меняем на cell.typeLabel.text = place.type
 
         cell.nameLabel.text = place.name //таким образом выбираем конкретное свойство с массива places
         cell.locationLabel.text = place.location
         cell.typeLabel.text = place.type
-        
-        if place.image == nil {
-            cell.imageOfPlace.image = UIImage(named: place.restaurantImage!)
-        } else {
-            cell.imageOfPlace.image = place.image
-        }
-        
+        cell.imageOfPlace.image = UIImage(data: place.imageData!)
+
         cell.imageOfPlace.layer.cornerRadius = cell.imageOfPlace.frame.size.height / 2 //заркугляем imageView
         cell.imageOfPlace.clipsToBounds = true //обрезаем изображение
 
         return cell
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    
+    //MARK: - Table view delegate
+    
+    //этот метод разрешает вызывать различные пункты меню через swipe
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        
+        let place = places[indexPath.row]
+        let deleteAction = UITableViewRowAction(style: .default, title: "Delete") { (_, _) in
+            
+            StorageManager.deletedObject(place) //удаляем запись с базы
+            tableView.deleteRows(at: [indexPath], with: .automatic) //удаляем запись с экрана
+        }
+        
+        return [deleteAction]
     }
-    */
+    
+    //MARK: - Navigation
+    
+    //этот метод используется при нажатии на определенную ячейку
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showDetail" {
+            guard  let indexPath = tableView.indexPathForSelectedRow else { return } //извлекаем конкретный индекс нажатой ячейки
+            let place = places[indexPath.row] //присваиваем place конкретные данные с DataBase
+            let newPlaceVC = segue.destination as! NewPlaceViewController //Привеодим newPlaceVC к типу NewPlaceViewController
+            newPlaceVC.currentPlace = place // подключаемся к currentPlace и передаем ему значение place (с DataBase)
+            
+        }
+    }
     
     @IBAction func unwindSegue(_ segue: UIStoryboardSegue) { //метод для выхода при нажати кнопки cancel
     
         guard let newPlaceVC = segue.source as? NewPlaceViewController else { return }
-        newPlaceVC.saveNewPlace()
-        places.append(newPlaceVC.newPlace!)
+        newPlaceVC.savePlace()
         tableView.reloadData()//обновляем интерфейс
 
     }
